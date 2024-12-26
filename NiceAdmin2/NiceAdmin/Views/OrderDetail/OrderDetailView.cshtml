@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model DataTable;
+@using System.Data
+<section>
+    <spna><h3>Order Detail List</h3></spna>
+    <span class="float-end">
+        <a class="btn btn-primary mb-3" asp-controller="OrderDetail" asp-action="AddUpdateOrderDetailView">Add Order Detail</a>
+        <a class="btn btn-primary mb-3" asp-controller="OrderDetail" asp-action="ExportToExcel">Download Excel</a>
+        <a class="btn btn-primary mb-3" asp-controller="OrderDetail" asp-action="Mail">Mail</a>
+    </span>
+    <h4 class="text-success">
+        @TempData["Message"]
+        @TempData["InsertUpdateMSG"]
+    </h4>
+    <h4 class="text-danger">
+        @TempData["Error"]
+        @TempData["AlertMessage"]
+    </h4>
+    <h5>@TempData["ErrorMSG"]</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">OrderDate</th>
+                <th scope="col">ProductName</th>
+                <th scope="col">UserName</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Amount</th>
+                <th scope="col">TotalAmount</th>
+                
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (DataRow dr in Model.Rows)
+        {
+            <tr>
+                <td>@dr["OrderDate"]</td>
+                <td>@dr["ProductName"]</td>
+                <td>@dr["UserName"]</td>
+                <td>@dr["Quantity"]</td>
+                <td>@dr["Amount"]</td>
+                <td>@dr["TotalAmount"]</td>
+               
+                <td>
+                    <a class="btn btn-warning asp-controller=" User" asp-action="AddUpdateOrderDetailView" asp-route-OrderDetailID="@dr["OrderDetailID"]">Edit</a>
+                </td>
+                <td>
+                    <form method="post" asp-controller="OrderDetail" asp-action="DeleteOrderDetail" asp-route-OrderDetailID="@dr["OrderDetailID"]" onsubmit="return confirm('Are you sure you want to delete this order detail?');">
+                        <input type="hidden" name="OrderDetailID" value="@dr["OrderDetailID"]" />
+                        <button type="submit" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+    </table>
+</section>

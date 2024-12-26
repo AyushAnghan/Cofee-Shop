@@ -1,0 +1,55 @@
+﻿@model ProductModel
+
+<div class="container mt-3 mb-3">
+    <h2>Add Product</h2>
+    <form method="post" asp-action="AddUpdateProductView" asp-controller="Product">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @* <div class="form-group">
+            <label for="ProductID">Product ID</label>
+            <input type="number" class="form-control mb-3" id="ProductID" name="ProductID" readonly>
+
+        </div> *@
+        <input type="hidden" asp-for="ProductID">
+        <div class="form-group">
+            <label for="ProductName">Product Name</label>
+            <input asp-for="ProductName" class="form-control mb-3" id="ProductName">
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+            <label for="ProductPrice">Product Price</label>
+            <input asp-for="ProductPrice" class="form-control mb-3" id="ProductPrice" step="0.01">
+            <span asp-validation-for="ProductPrice" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="ProductCode">Product Code</label>
+            <input asp-for="ProductCode" class="form-control mb-3" id="ProductCode">
+            <span asp-validation-for="ProductCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <textarea class="form-control mb-3" asp-for="Description" id="Description" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="UserID">User ID</label>
+            <select class="form-control" asp-for="UserID">
+                <option value="">Select User</option>
+                @foreach (var user in ViewBag.UserList)
+                {
+                    <option value="@user.UserID">@user.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="UserID" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success mt-3 me-3">Submit</button>
+        <a asp-action="ProductView" asp-controller="Product" class="btn btn-primary mt-3">Back To List</a>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

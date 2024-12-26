@@ -1,0 +1,105 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model DataTable;
+@using System.Data
+
+<section>
+    <span><h3>Customer List</h3></span>
+    <span class="float-end">
+        <a class="btn btn-primary mb-3" asp-controller="Customer" asp-action="AddUpdateCustomerView">Add Customer</a>
+        <a class="btn btn-primary mb-3" asp-controller="Customer" asp-action="ExportToExcel">Download Excel</a>
+        <a class="btn btn-primary mb-3" asp-controller="Customer" asp-action="Mail">Mail</a>
+    </span>
+
+    <h4 class="text-success">
+        @TempData["Message"]
+        @TempData["InsertUpdateMSG"]
+    </h4>
+    <h4 class="text-danger">
+        @TempData["Error"]
+        @TempData["AlertMessage"]
+    </h4>
+    <h5>@TempData["ErrorMSG"]</h5>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">CustomerName</th>
+                <th scope="col">HomeAddress</th>
+                <th scope="col">Email</th>
+                <th scope="col">MobileNo</th>
+                <th scope="col">GSTNo</th>
+                <th scope="col">City</th>
+                <th scope="col">PinCode</th>
+                <th scope="col">UserName</th>
+                <th scope="col">NetAmount</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow dr in Model.Rows)
+            {
+                <tr>
+                    <td>@dr["CustomerName"]</td>
+                    <td>@dr["HomeAddress"]</td>
+                    <td>@dr["Email"]</td>
+                    <td>@dr["MobileNo"]</td>
+                    <td>@dr["GST_NO"]</td>
+                    <td>@dr["CityName"]</td>
+                    <td>@dr["PinCode"]</td>
+                    <td>@dr["UserName"]</td>
+                    <td>@dr["NetAmount"]</td>
+                    <td>
+                        <a class="btn btn-warning" asp-controller="Customer" asp-action="AddUpdateCustomerView" asp-route-CustomerID="@dr["CustomerID"]">Edit</a>
+                    </td>
+                    <td>
+                        <!-- Trigger the Bootstrap modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@dr["CustomerID"]">
+                            Delete
+                        </button>
+
+                        <!-- Bootstrap Modal -->
+                        <div class="modal fade" id="deleteModal-@dr["CustomerID"]" tabindex="-1" aria-labelledby="deleteModalLabel-@dr["CustomerID"]" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel-@dr["CustomerID"]">Confirm Delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this customer?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                                        <!-- Delete Form -->
+                                        <form method="post" asp-controller="Customer" asp-action="DeleteCustomer" asp-route-CustomerID="@dr["CustomerID"]">
+                                            <input type="hidden" name="CustomerID" value="@dr["CustomerID"]" />
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts {
+    <!-- Bootstrap JS (if not already included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Custom CSS to remove the backdrop */
+        .modal-backdrop {
+            display: none;
+        }
+    </style>
+}

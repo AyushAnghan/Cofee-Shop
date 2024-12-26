@@ -1,0 +1,95 @@
+﻿@model CityModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">City Form</h2>
+        <form method="post">
+            <!-- CityID Dropdown -->
+            <div class="mb-3">
+               <input type="hidden" asp-for="CityID"/>
+
+            </div>
+
+            <!-- City Name -->
+            <div class="mb-3">
+                <label for="cityName" class="form-label">City Name</label>
+                <input type="text" class="form-control" id="cityName" name="CityName" asp-for="CityName" placeholder="Enter City Name" required>
+            </div>
+
+            <!-- CountryID -->
+            <div class="form-group">
+                <label asp-for="CountryID">County Name</label>
+                <select id="countryDropdown" class="form-control" asp-for="CountryID">
+                    <option value="">Select Country</option>
+                    @foreach (var country in ViewBag.CityList as List<CountryDropdownModel>)
+                    {
+                        <option value="@country.CountryID">@country.CountryName</option>
+                    } 
+                </select>
+
+            </div>
+            
+            <!-- StateID Dropdown -->
+            <div class="mb-3">
+                <label for="countryId" class="form-label">State Name</label>
+                <select id="stateDropdown" class="form-select"  asp-for="StateID">
+                    <option value="">Select State</option>
+                    
+                </select>
+            </div>
+
+
+            <!-- City Code -->
+            <div class="mb-3">
+                <label for="cityCode" class="form-label">City Code</label>
+                <input type="text" class="form-control" id="cityCode" name="CityCode" placeholder="Enter City Code" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional for enhanced functionality) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script  type="text/javascript">
+    $(document).ready(function () {
+       @* Country dropdown change *@
+            $('#countryDropdown').change(function () {
+            var StateId = $(this).val();
+
+            $.ajax({
+
+                url: '/statedropdown/' + StateId,
+                type: 'GET',
+                success: function (data) {
+                    console.log(data)
+                       
+                        $('#stateDropdown').empty();
+
+                        $('#stateDropdown').append('<option value="">Select State</option>');
+                    
+                    $.each(data, function (index, item) {
+                        console.log(item)
+                            $('#stateDropdown').append('<option value="' + item.stateID + '">' + item.stateName + '</option>');
+                    });
+                }
+            });
+        });
+
+
+    });
+</script>

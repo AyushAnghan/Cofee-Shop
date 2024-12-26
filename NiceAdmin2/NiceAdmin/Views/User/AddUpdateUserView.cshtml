@@ -1,0 +1,142 @@
+﻿@model UserModel
+
+<div class="container mt-3 mb-3">
+    <h2>User Form</h2>
+    <h5 class="text-danger">@TempData["AlertMessage"]</h5>
+    @* @(Model.UserId == 0 ? "Add User" : "Update User") *@
+    <form method="post" asp-action="AddUpdateUserView" asp-controller="User" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @* <div class="form-group"> *@
+        @* <label for="userId">User ID</label> *@
+        <input type="hidden" asp-for="UserId">
+
+        @* </div> *@
+        <div class="form-group">
+            <label for="userName">User Name</label>
+            <input asp-for="UserName" class="form-control mb-3" id="userName">
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input asp-for="Password" class="form-control mb-3" id="password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control mb-3" id="email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="mobileNo">Mobile No</label>
+            <input asp-for="MobileNo" class="form-control mb-3" id="mobileNo">
+            <span asp-validation-for="MobileNo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input asp-for="Address" class="form-control mb-3" id="mobileNo">
+            <span asp-validation-for="Address" class="text-danger"></span>
+            @* <textarea class="form-control mb-3" id="address" name="address" rows="3"></textarea> *@
+        </div>
+        <div class="form-group form-check">
+            <input asp-for="IsActive" class="form-check-input" id="isActive">
+            <label class="form-check-label mb-3">Is Active</label>
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+
+        
+        
+        <!-- File Upload Input -->
+        @* <div class="form-group"> *@
+            @* <label>Profile Picture</label> *@
+            @* <div> *@
+                @* <img id="imagePreview" *@
+                     @* src="@Url.Content(Model.PhotoPath ?? "#")" *@
+                     @* alt="Image Preview" *@
+                     @* style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; display: @(string.IsNullOrEmpty(Model.PhotoPath) ? "none" : "block"); margin: 10px auto;" /> *@
+            @* </div> *@
+            @* <input type="file" id="imageUpload" asp-for="file" class="form-control mb-3 mt-3" accept="image/*" onchange="previewImage(event)" style="margin: 20px auto; display: block;" /> *@
+            @* <button type="button" class="btn btn-danger mb-3" id="removeImageButton" style="display: @(string.IsNullOrEmpty(Model.PhotoPath) ? "none" : "block");" onclick="removeImage()">Remove</button> *@
+            @* <span asp-validation-for="file" class="text-danger"></span> *@
+        @* </div> *@
+
+        @* <div class="form-group">
+            <label asp-for="RoleID">Role ID</label>
+            <select class="form-control" asp-for="RoleID">
+                <option value="">Select Role</option>
+                @foreach (var role in ViewBag.RoleList)
+                {
+                    <option value="@role.RoleID">@role.Role</option>
+                }
+            </select>
+            <span asp-validation-for="RoleID" class="text-danger"></span>
+        </div> *@
+
+        <button type="submit" class="btn btn-success mt-3 me-3">Submit</button>
+        <a asp-action="UserView" asp-controller="User" class="btn btn-primary mt-3">Back To List</a>
+    </form>
+    
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Function to handle image preview when a file is selected
+        // function previewImage(event) {
+        //     var imagePreview = document.getElementById('imagePreview');
+        //     var file = event.target.files[0];
+
+        //     if (file) {
+        //         var reader = new FileReader();
+
+        //         reader.onload = function (e) {
+        //             imagePreview.src = e.target.result;
+        //             imagePreview.style.display = 'block'; // Show the image once it's loaded
+        //         }
+
+        //         reader.readAsDataURL(file); // Convert the image file to a data URL
+        //     } else {
+        //         imagePreview.src = '#';
+        //         imagePreview.style.display = 'none'; // Hide the image if no file is selected
+        //     }
+        // }
+
+        // Function to handle image preview when a file is selected
+        function previewImage(event) {
+            var imagePreview = document.getElementById('imagePreview');
+            var removeButton = document.getElementById('removeImageButton');
+            var file = event.target.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // Show the image once it's loaded
+                    removeButton.style.display = 'block'; // Show the remove button
+                }
+
+                reader.readAsDataURL(file); // Convert the image file to a data URL
+            } else {
+                imagePreview.src = '#';
+                imagePreview.style.display = 'none'; // Hide the image if no file is selected
+                removeButton.style.display = 'none'; // Hide the remove button
+            }
+        }
+
+        // Function to handle removing the selected image
+        function removeImage() {
+            var imageUpload = document.getElementById('imageUpload');
+            var imagePreview = document.getElementById('imagePreview');
+            var removeButton = document.getElementById('removeImageButton');
+
+            // Reset the file input and hide the image preview
+            imageUpload.value = '';
+            imagePreview.src = '#';
+            imagePreview.style.display = 'none';
+            removeButton.style.display = 'none';
+        }
+    </script>
+}

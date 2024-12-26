@@ -1,0 +1,71 @@
+﻿@model OrderModel
+<div class="container mt-3 mb-3">
+    <h2>Add Order</h2>
+    <form method="post" asp-action="AddUpdateOrderView" asp-controller="Order">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            @* <label for="OrderID">Order ID</label> *@
+            <input type="hidden" asp-for="OrderID">
+        </div>
+
+        @if (Model.OrderID != 0)
+        {
+            <div class="form-group">
+                <label for="OrderDate">Order Date</label>
+                <input asp-for="OrderDate" class="form-control mb-3" id="OrderDate">
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+        }
+
+        <div class="form-group">
+            <label for="CustomerID">Customer ID</label>
+            <select class="form-control" asp-for="CustomerID">
+                <option value="">Select User</option>
+                @foreach (var customer in ViewBag.CustomerList)
+                {
+                    <option value="@customer.CustomerID">@customer.CustomerName</option>
+                }
+            </select>
+            <span asp-validation-for="CustomerID" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="PaymentMode">Payment Mode</label>
+            <input class="form-control mb-3" id="PaymentMode" asp-for="PaymentMode">
+            <span asp-validation-for="PaymentMode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="TotalAmount">Total Amount</label>
+            <input step="0.01" class="form-control mb-3" id="TotalAmount" asp-for="TotalAmount">
+            <span asp-validation-for="TotalAmount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="ShippingAddress">Shipping Address</label>
+            <textarea class="form-control mb-3" id="ShippingAddress" rows="3" asp-for="ShippingAddress"></textarea>
+            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="UserID">User ID</label>
+            <select class="form-control" asp-for="UserID">
+                <option value="">Select User</option>
+                @foreach (var user in ViewBag.UserList)
+                {
+                    <option value="@user.UserID">@user.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="UserID" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3 me-3">Submit</button>
+        <a asp-action="OrderView" asp-controller="Order" class="btn btn-primary mt-3">Back To List</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

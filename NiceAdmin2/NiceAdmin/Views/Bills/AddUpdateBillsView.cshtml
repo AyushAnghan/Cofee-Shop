@@ -1,0 +1,69 @@
+﻿@model BillsModel
+
+<div class="container mt-3 mb-3">
+    <h2>Add Bill</h2>
+    <form method="post" asp-action="AddUpdateBillsView" asp-controller="Bills">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @* <div class="form-group"> *@
+        @* <label for="BillID">Bill ID</label> *@
+        <input type="hidden" asp-for="BillID">
+        @* </div> *@
+        <div class="form-group">
+            <label asp-for="BillNumber">Bill Number</label>
+            <input asp-for="BillNumber" class="form-control mb-3" id="BillNumber">
+            <span asp-validation-for="BillNumber" class="text-danger"></span>
+        </div>
+        @if (Model.BillID != 0)
+        {
+            <div class="form-group">
+                <label asp-for="BillDate">Bill Date</label>
+                <input asp-for="BillDate" class="form-control mb-3" id="BillDate">
+                <span asp-validation-for="BillDate" class="text-danger"></span>
+            </div>
+        }
+        <div class="form-group">
+            <label for="orderID">Order ID</label>
+            <select class="form-control" asp-for="OrderID">
+                <option value="">Select Order</option>
+                @foreach (var order in ViewBag.OrderList)
+                {
+                    <option value="@order.OrderID">@order.OrderID</option>
+                }
+            </select>
+            <span asp-validation-for="OrderID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TotalAmount">Total Amount</label>
+            <input asp-for="TotalAmount" class="form-control mb-3" id="TotalAmount" step="0.01">
+            <span asp-validation-for="TotalAmount" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Discount">Discount</label>
+            <input asp-for="Discount" class="form-control mb-3" id="Discount" step="0.01">
+            <span asp-validation-for="Discount" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NetAmount">Net Amount</label>
+            <input asp-for="NetAmount" class="form-control mb-3" id="NetAmount" step="0.01">
+            <span asp-validation-for="NetAmount" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserID">User ID</label>
+            <select asp-for="UserID" class="form-control">
+                <option value="">Select User</option>
+                @foreach (var user in ViewBag.UserList)
+                {
+                    <option value="@user.UserID">@user.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="UserID" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success mt-3 me-3">Submit</button>
+        <a asp-action="BillsView" asp-controller="Bills" class="btn btn-primary mt-3">Back To List</a>
+    </form>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }

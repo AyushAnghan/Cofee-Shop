@@ -1,0 +1,70 @@
+﻿@model CustomerModel
+    <div class="container mt-3 mb-3">
+        <h2>Add Customer</h2>
+    <form method="post" asp-action="AddUpdateCustomerView" asp-controller="Customer">
+        <div asp-validation-summary="All" class="text-danger"></div>
+            @* <div class="form-group"> *@
+                @* <label for="CustomerID">Customer ID</label> *@
+                <input type="hidden" class="form-control mb-3" asp-for="CustomerID">
+            @* </div> *@
+            <div class="form-group">
+            <label asp-for="CustomerName">Customer Name</label>
+            <input asp-for="CustomerName" class="form-control mb-3" id="CustomerName" >
+            <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="HomeAddress">Home Address</label>
+            <input asp-for="HomeAddress" class="form-control mb-3" id="HomeAddress" >
+            <span asp-validation-for="HomeAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control mb-3" id="Email" >
+            <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="MobileNo">Mobile Number</label>
+            <input asp-for="MobileNo" class="form-control mb-3" id="MobileNo" >
+            <span asp-validation-for="MobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="GST_NO">GST Number</label>
+            <input asp-for="GST_NO" class="form-control mb-3" id="GSTNo">
+            <span asp-validation-for="GST_NO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="CityName">City Name</label>
+            <input asp-for="CityName" class="form-control mb-3" id="CityName" >
+            <span asp-validation-for="CityName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="PinCode">Pin Code</label>
+            <input asp-for="PinCode" class="form-control mb-3" id="PinCode" >
+            <span asp-validation-for="PinCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="NetAmount">Net Amount</label>
+            <input asp-for="NetAmount" class="form-control mb-3" id="NetAmount" step="0.01" >
+            <span asp-validation-for="NetAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="UserID">User ID</label>
+            <select asp-for="UserID" class="form-control">
+                <option value="">Select User</option>
+                @foreach (var user in ViewBag.UserList)
+                {
+                    <option value="@user.UserID">@user.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="UserID" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success mt-3 me-3">Submit</button>
+            <a asp-action="CustomerView" asp-controller="Customer" class="btn btn-primary mt-3">Back To List</a>
+        </form>
+    </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

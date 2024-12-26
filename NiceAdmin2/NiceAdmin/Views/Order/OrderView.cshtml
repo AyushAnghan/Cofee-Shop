@@ -1,0 +1,96 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model DataTable;
+@using System.Data
+
+<section>
+    <spna><h3>Order List</h3></spna>
+    <span class="float-end">
+        <!-- Search bar -->
+        @* <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search Orders" title="Enter search keyword"> *@
+
+        <!-- Action buttons -->
+        <a class="btn btn-primary mb-3" asp-controller="Order" asp-action="AddUpdateOrderView">Add Order</a>
+        <a class="btn btn-primary mb-3" asp-controller="Order" asp-action="ExportToExcel">Download Excel</a>
+        <a class="btn btn-primary mb-3" asp-controller="Order" asp-action="Mail">Mail</a>
+    </span>
+
+    <h4 class="text-success">
+        @TempData["Message"]
+        @TempData["InsertUpdateMSG"]
+    </h4>
+    <h4 class="text-danger">
+        @TempData["Error"]
+        @TempData["AlertMessage"]
+    </h4>
+    <h5>@TempData["ErrorMSG"]</h5>
+
+    <!-- Orders table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">OrderDate</th>
+                <th scope="col">CustomerName</th>
+                <th scope="col">PaymentMode</th>
+                
+                <th scope="col">ShippingAddress</th>
+                <th scope="col">UserName</th>
+                <th scope="col">TotalAmount</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            @foreach (DataRow dr in Model.Rows)
+            {
+                <tr>
+                    <td>@dr["OrderDate"]</td>
+                    <td>@dr["CustomerName"]</td>
+                    <td>@dr["PaymentMode"]</td>
+                    
+                    <td>@dr["ShippingAddress"]</td>
+                    <td>@dr["UserName"]</td>
+                    <td>@dr["TotalAmount"]</td>
+                    <td>
+                        <a class="btn btn-warning" asp-controller="Order" asp-action="AddUpdateOrderView" asp-route-OrderID="@dr["OrderID"]">Edit</a>
+                    </td>
+                    <td>
+                        <form method="post" asp-controller="Order" asp-action="DeleteOrder" asp-route-OrderID="@dr["OrderID"]">
+                            <input type="hidden" name="OrderID" value="@dr["OrderID"]" />
+                            <button type="submit" class="btn btn-danger" onclick="return fun1();">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tableBody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        function fun1() {
+            return confirm("Are you sure you want to delete?");
+        }
+
+        $(document).ready(function () {
+            var deleteSuccess = '@TempData["SuccessMSG"]';
+            if (deleteSuccess === "True") {
+                alert("Order has been successfully deleted.");
+            }
+        });
+    </script>
+}

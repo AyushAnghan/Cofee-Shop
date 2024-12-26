@@ -1,0 +1,33 @@
+﻿@using NiceAdmin.Helper
+@model DataTable;
+@using System.Data
+
+<section>
+    <span><h3>City List</h3></span>
+    <span class="float-end">
+        <a class="btn btn-primary mb-3" asp-controller="City" asp-action="AddUpdateCityView">Add City</a>
+    </span>
+    <table class="table">
+        <thead>
+            <tr>
+                
+                <th scope="col">CityName</th>
+                <th scope="col">Country Name</th>
+                <th scope="col">State Name</th>
+            </tr>
+        </thead>
+        @foreach (DataRow dataRow in Model.Rows)
+        {
+            <tr>
+                @* <td>@dataRow["CityId"]</td> *@
+                <td>@dataRow["CityName"]</td>
+                <td>@dataRow["CountryName"]</td>
+                <td>@dataRow["StateName"]</td>
+                <td>
+                <td><a class="btn btn-warning" asp-controller="City" asp-action="AddUpdateCityView" asp-route-cityId="@UrlEncryptor.Encrypt(dataRow["CityID"].ToString())">Edit</a></td>
+                <td><a class="btn btn-danger" asp-controller="City" asp-action="DeleteCity" asp-route-cityId="@dataRow["CityId"]">Delete</a></td>
+                </td>                
+            </tr>
+        }
+    </table>
+</section>
